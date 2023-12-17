@@ -1,0 +1,20 @@
+---
+- hosts: maven-server
+  become: true
+  tasks:
+
+    - name: Update packages
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Install docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start Docker Services
+      service:
+        name: docker
+        state: started
+    - name: give 777 permission on /var/run/docker.sock

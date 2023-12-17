@@ -1,0 +1,32 @@
+---
+- hosts: jenkins-master
+  become: true
+  tasks:
+    - name: Update package cache
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Install Java
+      dnf:
+        name: java-17-amazon-corretto
+        state: present
+
+    - name: Add Jenkins Repository
+      shell: "wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo"
+      args:
+        creates: /etc/yum.repos.d/jenkins.repo
+
+    - name: Import Jenkins RPM GPG Key
+      shell: "rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key"
+
+    - name: Install Jenkins
+      yum:
+        name: jenkins
+        state: present
+
+    - name: Start Jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes

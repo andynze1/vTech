@@ -1,0 +1,45 @@
+---
+- hosts: build-server
+  become: true
+  tasks:
+    - name: Update package cache
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Install Java (Amazon Corretto)
+      yum:
+        name: java-1.8.0-amazon-corretto-devel
+        state: present
+
+    - name: Install Maven
+      yum:
+        name: maven
+        state: present
+    
+    - name: Install Apache Tomcat
+      get_url:
+        url: "https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.72/bin/apache-tomcat-8.5.72.tar.gz"
+        dest: "/tmp/apache-tomcat-8.5.72.tar.gz"
+
+    - name: Extract Apache Tomcat
+      ansible.builtin.unarchive:
+        src: "/tmp/apache-tomcat-8.5.72.tar.gz"
+        dest: "/opt/"
+
+    - name: Set Tomcat Environment Variables
+      lineinfile:
+        dest: "/etc/environment"
+        line: "CATALINA_HOME=/opt/apache-tomcat-8.5.72"
+
+    - name: Print Java version
+      command: java -version
+      register: java_version
+
+    - name: Print Maven version
+      command: mvn -v
+      register: maven_version
+
+    - name: Display installed Java and Maven versions
+      debug:
+        msg: "Java Version: {{ java_version.stdout_lines }}\nMaven Version: {{ maven_version.stdout_lines }}"

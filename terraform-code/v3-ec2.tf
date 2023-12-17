@@ -122,6 +122,7 @@ resource "aws_route_table_association" "dml-rta-public-subent-02" {
                 sudo echo "export CATALINA_HOME=\"/opt/tomcat\"" >> ~/.bashrc
                 sudo echo "export PATH=\"\$PATH:\$CATALINA_HOME/bin\"" >> ~/.bashrc
                 source ~/.bashrc
+                sleep 10 
                 sudo /opt/tomcat/bin/catalina.sh start
                 EOF
 
