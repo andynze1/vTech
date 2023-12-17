@@ -112,7 +112,7 @@ resource "aws_route_table_association" "dml-rta-public-subent-02" {
                 sudo hostnamectl set-hostname maven-server
                 sudo wget https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
                 sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
-                sudo yum install apache-maven git -y
+                sudo yum install apache-maven locate git -y
                 sleep 30
                 sudo wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.83/bin/apache-tomcat-9.0.83.tar.gz
                 sudo tar -zxvf apache-tomcat-9.0.83.tar.gz
